@@ -1,3 +1,4 @@
+$(document).ready(function() {
   $('#weatherLocation').click(function() {
     $.ajax({
       url: `http://api.openweathermap.org/data/2.5/weather?q=Chicago&appid=7a56d05c52d62e22e7ecfda51f894493`,

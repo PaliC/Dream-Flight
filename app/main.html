@@ -16,13 +16,22 @@
 	</head>
 	<body>
 		<div class="row">
-			<div id="search-box" class="col-md-3">
-				<img id="logo" src="plane.jpg"/>
-				<div id="search-input">
+				<div id="search-box" class="col-md-3">
+					<img id="logo" src="plane.jpg"/>
+				
+					<div id="search-input">
+						<label for="start">Start</label>
+						<input type="date" id="start" name="trip"
+								value="2018-07-29"
+								min="2018-01-01" max="2018-12-31"/ >
+						<label for="end">End</label>
+						<input type="date" id="end" name="trip"
+								value="2018-07-29"
+								min="2018-01-01" max="2018-12-31"/ >
+					</div>
+					<button type="button" id="submit">Let's Go on a Trip!!!!</button>
 				</div>
-			</div>
-			
-			<div id="map-box" class="col-md-9">
+				<div id="map" class="col-md-9">
 			</div>
 		</div>
 	</body>
