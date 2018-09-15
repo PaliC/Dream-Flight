@@ -1,3 +1,12 @@
 # Usage
-run `pipenv install`
-run `pipenv run python3 manage.py runserver` 
+run `virtualenv flask`
+
+run `cd flask`
+
+run `. bin/activate`
+
+run `pip install Flask`
+
+run `python routes.py`
+
+Visit http://localhost:5000/ in your browser
