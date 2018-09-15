@@ -1,0 +1,13 @@
+#logo{
+	margin:auto;
+	width: 50%;
+	display: block;
+}
+
+#search-box{
+	background: blue;
+}
+
+#map-box{
+	background: green;
+}
