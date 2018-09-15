@@ -13,7 +13,7 @@ amadeus = Client(
 APIkey = "deruRte5Y9yrs4eK59paEuSZ9mGbGX0G"
 
 
-def max_price_search(max_price, ori): #returns list_of_destinations, each element is [airport,city,state,country,price,]
+def max_price_search(max_price, ori): #returns list_of_destinations, each element is [airport,city,state,country,price,importance]
     list_of_destinations = []
     try:
         url = "https://api.sandbox.amadeus.com/v1.2/flights/inspiration-search?origin=" + str(ori) + "&apikey=" + APIkey + "&max_price=" + str(max_price)
@@ -28,10 +28,7 @@ def max_price_search(max_price, ori): #returns list_of_destinations, each elemen
             ret = x["return_date"]
             air = x["airline"]
             price = x["price"]
-            #start here Sahan...
-
-
-            #####
+            
 
 
             
