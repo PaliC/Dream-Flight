@@ -2,32 +2,50 @@ html, body {
 	height: 100%;
 	margin: 0;
 	padding: 0;
+	font-family: 'Futura', Arial;
 }
 
-#logo{
+p, label {
+	color: white;
+}
+
+#logo {
 	margin:auto;
-	width: 50%;
+	width: 100%;
 	display: block;
 }
 
-#search-box{
-	background: blue;
+#side-bar {
+	background-color: #7B7B7B; /* grey */
+}
+
+#go-button {
+	background-color: #14A8D5; /* teal */
+	color: white;
+}
+
+#credits {
+	font-size: 10px;
+}
+
+/*#search-box{
+	background: #7B7B7B;
 	position: fixed;
 	margin: 0;
 	padding: 0;
 	
 	height: 100%;
 	width: 30%;
-}
-#search-input{
-	position: fixed;
+}*/
+#search-input {
+	/*position: fixed;*/
 	height: 100%;
 }
 
-#map{
+#map {
 	height: 100%;
-	width: 70%;
-	left:30%;
+	width: 100%;
+	/*left:30%;*/
 	margin: 0;
 	padding: 0;
 }

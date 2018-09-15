@@ -1,39 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
 	<head>
-		<title> DreamFlights - Find cheap flights to your dream destination! </title>
+		<title> DreamFlight - Find cheap flights to your dream destination! </title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
-		
+		<meta name="description" content="Find cheap flights to your dream destination!"/>
+
+		<!-- Bootstrap 4.1.0 -->
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+
 		<script src="jquery-3.3.1.min.js"></script>
+
 		<!-- Our files -->
 		<script src="main.js"></script>
 		<link rel="stylesheet" type="text/css" href="main.css">
 	</head>
+
 	<body>
-		<div id="search-box">
-			<img id="logo" src="plane.jpg"/>
-		
-			<div id="search-input">
-				<label for="start">Start</label>
-				<input type="date" id="start" name="trip"
-						value="2018-07-29"
-						min="2018-01-01" max="2018-12-31"/>
-				<label for="end">End</label>
-				<input type="date" id="end" name="trip"
-						value="2018-07-29"
-						min="2018-01-01" max="2018-12-31"/>
+		<div class="container-fluid h-100 p-0" id="wrapper">
+			<div class="row h-100">
+
+				<!-- Left Side Bar -->
+				<div class="col-3" id="side-bar">
+					<!-- Logo -->
+					<img class="mx-4 my-5" id="logo" src="./static/img/logo-white.svg"/>
+					<!-- Start Location -->
+					<input class="form-control ml-3 my-5" type="text" placeholder="Start location">
+					<!-- Travel Dates -->
+					<p class="text-center">Travel Dates</p>
+					<div class="form-group row ml-3">
+					  	<label for="departure-date-input" class="col-form-label">Departure</label>
+					    <input class="form-control" type="date" name="trip"
+					    	   value="2018-09-16" min="2018-09-16" max="2020-12-31" id="departure-date-input">
+					</div>
+					<div class="form-group row ml-3">
+					  	<label for="return-date-input" class="col-form-label">Return</label>
+					    <input class="form-control" type="date" name="trip"
+					    	   value="2018-09-16" min="2018-09-16" max="2020-12-31" id="return-date-input">
+					</div>
+					<!-- Go Button -->
+					<div class="text-center ml-3">
+						<button type="button" class="btn btn-light btn-lg my-5" id="go-button">Start exploring!</button>
+					</div>
+					<!-- Credits -->
+					<div class="text-center">
+					  <p class="ml-3 white-text" id="credits">Frankie Lam, Lillian Meng, Sahan Paliskara, Lucas Salvador</p>
+					  <p class="white-text" id="credits">HackMIT 2018</p>
+					</div>
+				</div>
+
+				<!-- Map -->
+				<div class="col-9" style="background-color: #7B7B7B;">
+					<div id="search-input">
+						<div id="map"></div>
+						
+						<!-- Maps Scripts -->
+						<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+						</script>
+						<script async defer
+						src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD9r-x5GFNNMAfQKTJylb7tRQ5lJXymh6Y&callback=initMap">
+						</script>
+					</div>
+				</div> <!-- End Map -->
 			</div>
-			<button type="button" id="submit">Let's Go on a Trip!</button>
 		</div>
-		
-		<div id="map"></div>
-		
-		<!-- Maps Scripts -->
-		<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
-		</script>
-		<script async defer
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD9r-x5GFNNMAfQKTJylb7tRQ5lJXymh6Y&callback=initMap">
-		</script>
 	</body>
 </html>
