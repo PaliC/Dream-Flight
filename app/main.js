@@ -6,6 +6,8 @@ var circles = [];
 
 var quant = 0;
 
+var oldWindow = null;
+
 function getCodes(){
 	$.ajax({
 		url:'./city_data.txt',
@@ -164,10 +166,24 @@ $(document).ready(function() {
 								center: city.center,
 								radius: Math.sqrt(city.movement) * 100
 							});
+									
+							let center = city.center;
+							cityCircle.addListener('click', function() {
+								if (oldWindow != null)
+									oldWindow.close();
+								map.setCenter(center);
+								var infoWindow = new google.maps.InfoWindow({
+									position: center,
+									content: "hello",
+									map: map
+								});
+								oldWindow = infoWindow;
+							});
+							
 							circles.push(cityCircle);
 						}
 					}
-					/*else{
+					else{
 						$.ajax({
 							type: 'GET',
 							url: "https://api.sandbox.amadeus.com/v1.2/location/" + response.results[i].destination + "?apikey=" + APIkey
@@ -196,11 +212,25 @@ $(document).ready(function() {
 										center: city.center,
 										radius: Math.sqrt(city.movement) * 100
 									});
+									
+									let center = city.center;
+									cityCircle.addListener('click', function() {
+										if (oldWindow != null)
+											oldWindow.close();
+										map.setCenter(center);
+										var infoWindow = new google.maps.InfoWindow({
+											position: center,
+											content: "hello",
+											map: map
+										});
+										oldWindow = infoWindow;
+									});
+									
 									circles.push(cityCircle);
 								}
 							}
 						});
-					}*/
+					}
 				}
 			});
 		});
