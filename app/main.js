@@ -148,7 +148,7 @@ $(document).ready(function() {
 					let price = response.results[i].price;
 					let quant2 = quant;
 
-					let color = getColor(Number(price)*exchange_rates[currency], budget);
+					let color = getColor(Number(price), budget*exchange_rates[currency]);
 
 					var cityCode = response.results[i].destination;
 					if(cityCode in cityCodes){
