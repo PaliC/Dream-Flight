@@ -4,6 +4,8 @@ var cityCodes = {};
 
 var circles = [];
 
+var quant = 0;
+
 function getCodes(){
 	$.ajax({
 		url:'./city_data.txt',
@@ -38,8 +40,8 @@ function initMap() {
 	  center: {lat: 0, lng: 0},
 	  mapTypeId: 'roadmap'
 	});
-	  getCodes();
-	  getExchangeRates();
+	getCodes();
+	getExchangeRates();
 }
 
 function getColor(price, max_price){
@@ -114,6 +116,8 @@ $(document).ready(function() {
 	}
 	
 	$('#go-button').click(function() {
+		quant++;
+		
 		for (var i = 0; i < circles.length; i++)
 			circles[i].setMap(null);
 		circles = [];
@@ -139,47 +143,17 @@ $(document).ready(function() {
 						+ "&duration=" + trip_duration
 			}).done(function(response) {
 				let currency = response.currency;
-				alert(exchange_rates[currency])
 				for (var i=0; i<response.results.length; i++){
 					// Add the circle for this city to the map.
 					let price = response.results[i].price;
+					let quant2 = quant;
 
 					let color = getColor(Number(price)*exchange_rates[currency], budget);
 
 					var cityCode = response.results[i].destination;
-				if(cityCode in cityCodes){
-					var city = cityCodes[cityCode];
-					var cityCircle = new google.maps.Circle({
-						strokeColor: color,
-						strokeOpacity: 1,
-						strokeWeight: 2,
-						fillColor: color,
-						fillOpacity: 0.6,
-						map: map,
-						center: city.center,
-						radius: Math.sqrt(city.movement) * 100
-					});
-					circles.push(cityCircle);
-				}
-				else{
-					$.ajax({
-						type: 'GET',
-						url: "https://api.sandbox.amadeus.com/v1.2/location/" + response.results[i].destination + "?apikey=" + APIkey
-					}).done(function(sec_response) {
-						var total =  0;
-						if (sec_response.airports !== undefined || typeof sec_response.airports !== "undefined"){
-
-							for (var i=0; i<sec_response.airports.length; i++){
-								total = total + sec_response.airports[i].aircraft_movements;
-							}				
-							var city = {
-								name: sec_response.city.name,
-								state: sec_response.city.state,
-								country: sec_response.city.country,
-								center: {lat:  sec_response.city.location.latitude, lng: sec_response.city.location.longitude},
-								movement: total
-							}
-						
+					if(cityCode in cityCodes){
+						var city = cityCodes[cityCode];
+				        if (quant == quant2){
 							var cityCircle = new google.maps.Circle({
 								strokeColor: color,
 								strokeOpacity: 1,
@@ -192,8 +166,41 @@ $(document).ready(function() {
 							});
 							circles.push(cityCircle);
 						}
-					});
-				}
+					}
+					/*else{
+						$.ajax({
+							type: 'GET',
+							url: "https://api.sandbox.amadeus.com/v1.2/location/" + response.results[i].destination + "?apikey=" + APIkey
+						}).done(function(sec_response) {
+							var total =  0;
+							if (sec_response.airports !== undefined || typeof sec_response.airports !== "undefined"){
+
+								for (var i=0; i<sec_response.airports.length; i++){
+									total = total + sec_response.airports[i].aircraft_movements;
+								}				
+								var city = {
+									name: sec_response.city.name,
+									state: sec_response.city.state,
+									country: sec_response.city.country,
+									center: {lat:  sec_response.city.location.latitude, lng: sec_response.city.location.longitude},
+									movement: total
+								}
+								if (quant == quant2){
+									var cityCircle = new google.maps.Circle({
+										strokeColor: color,
+										strokeOpacity: 1,
+										strokeWeight: 2,
+										fillColor: color,
+										fillOpacity: 0.6,
+										map: map,
+										center: city.center,
+										radius: Math.sqrt(city.movement) * 100
+									});
+									circles.push(cityCircle);
+								}
+							}
+						});
+					}*/
 				}
 			});
 		});
