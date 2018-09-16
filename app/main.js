@@ -54,7 +54,7 @@ function getColor(price, max_price){
 }
 
 $(document).ready(function() {
-	var APIkey = "knok2EsBatxfKdIeAXbAjhqQDGEFMAul";
+	var APIkey = "jqZzQqxQnQvwGT9OGZp5Vk3fD6M7nVMR";
 	
 	const _MS_PER_DAY = 1000 * 60 * 60 * 24;
 
@@ -66,7 +66,6 @@ $(document).ready(function() {
 	}
 	
 	function give_me_some_inspiration(ori, departure_date, return_date, max_price){
-		var APIkey = "deruRte5Y9yrs4eK59paEuSZ9mGbGX0G";
 		var duration = dateDiffInDays(new Date(departure_date),new Date(return_date));
 		$.ajax({
 			type: 'GET',
@@ -83,7 +82,6 @@ $(document).ready(function() {
 	}
 
 	function find_poi(lat, long, rad){
-		var APIkey = "deruRte5Y9yrs4eK59paEuSZ9mGbGX0G";
 		$.ajax({
 			type: 'GET',
 			url: "https://api.sandbox.amadeus.com/v1.2/points-of-interest/yapq-search-circle?apikey=" + APIkey + "&latitude=" + lat + "&longitude=" + long + "&radius=" + rad
