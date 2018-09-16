@@ -4,11 +4,9 @@ var cityCodes = {};
 
 var circles = [];
 
-var quant = 0;
-
 var oldWindow = null;
 
-var APIkey = "NqNytpE4Bcc1vcYgzkEBjWxqIqTGJiai";
+var APIkey = "mlsw48G7Se4CVidqGLiDJ5ipZlJkA8IW";
 
 function getCodes(){
 	$.ajax({
@@ -87,16 +85,17 @@ function get_flight_text(start_location, cityCode, departure_date, duration, pri
 	var return_day = return_date.getFullYear()+ "-" + month + "-" + date;
 	$.ajax({
 		type: 'GET',
+		async: false,
 		url: "https://api.sandbox.amadeus.com/v1.2/flights/low-fare-search?apikey=" + APIkey 
 			+ "&origin=" + start_location + "&destination=" + cityCode
-			+ "&departure_date=" + departure_date + "&return_date=" + return_day
+			+ "&departure_date=" + departure_date + "&return_date=" + return_day + "&number_of_results=1"
 	}).done(function(response) {
 		
 		outbound_duration = response.results[0].itineraries[0].outbound.duration;
 		inbound_duration = response.results[0].itineraries[0].inbound.duration;
 		fare = response.results[0].fare.total_price;
-		outbound_stops = response.results[0].itineraries[0].outbound.flights.length-1;
-		inbound_stops = response.results[0].itineraries[0].inbound.flights.length-1;
+		outbound_stops = response.results[0].itineraries[0].outbound.flights.length;
+		inbound_stops = response.results[0].itineraries[0].inbound.flights.length;
 		
 		seats_left = 99;
 		for (var i=0;i<=outbound_stops;i++){
@@ -108,32 +107,28 @@ function get_flight_text(start_location, cityCode, departure_date, duration, pri
 
 		if (outbound_stops == 0)
 			outbound_stops = "Direct";
-		else outbound_stops = toString(outbound_stops) + " stops";
+		else outbound_stops = outbound_stops + " stops";
 		if (inbound_stops == 0)
 			inbound_stops = "Direct";
-		else inbound_stops = toString(inbound_stops) + " stops";
+		else inbound_stops = inbound_stops + " stops";
 
 		text = "Outbound: " + outbound_duration + ", " + outbound_stops + "\nReturn: " 
-		+ inbound_duration + ", " + inbound_stops + "\nPrice: $" + "fare\nSeats remaining " + seats_left + "\n";
-		
-		alert(text);
+		+ inbound_duration + ", " + inbound_stops + "\nPrice: $" + fare + "\nSeats remaining " + seats_left + "\n";
 		
 		return text;
 	});
 }
 
-function refresh(){
-	quant++;
-	
+function refresh(){	
 	for (var i = 0; i < circles.length; i++)
 		circles[i].setMap(null);
 	circles = [];
+	google.maps.event.clearListeners(map, 'new_request');
 	
 	var start_location = document.getElementById('Start-location').value;
 	var budget = document.getElementById('budget-input').value;
 	budget = Number(budget);
 	var departure_date = document.getElementById('departure-date-input').value;
-	// var return_date = document.getElementById('return-date-input').value;
 	var trip_duration = document.getElementById('trip-duration').value;
 	
 	$.ajax({
@@ -153,41 +148,38 @@ function refresh(){
 			for (var i=0; i<response.results.length; i++){
 				// Add the circle for this city to the map.
 				let price = response.results[i].price;
-				let quant2 = quant;
 
 				let color = getColor(Number(price), budget*exchange_rates[currency]);
 
 				var cityCode = response.results[i].destination;
 				if(cityCode in cityCodes){
 					var city = cityCodes[cityCode];
-			        if (quant == quant2){
-						var cityCircle = new google.maps.Circle({
-							strokeColor: color,
-							strokeOpacity: 1,
-							strokeWeight: 2,
-							fillColor: color,
-							fillOpacity: 0.6,
-							map: map,
-							center: city.center,
-							radius: 10000+Math.sqrt(city.movement) * 100
-						});
+					var cityCircle = new google.maps.Circle({
+						strokeColor: color,
+						strokeOpacity: 1,
+						strokeWeight: 2,
+						fillColor: color,
+						fillOpacity: 0.6,
+						map: map,
+						center: city.center,
+						radius: 10000+Math.sqrt(city.movement) * 100
+					});
 
-						let center = city.center;
-						cityCircle.addListener('click', function() {
-							if (oldWindow != null)
-								oldWindow.close();
-							map.setCenter(center);
-							var text = get_flight_text(start_location, cityCode, departure_date, trip_duration, Number(price));
-							var infoWindow = new google.maps.InfoWindow({
-								position: center,
-								content: text,
-								map: map
-							});
-							oldWindow = infoWindow;
+					let center = city.center;
+					cityCircle.addListener('click', function() {
+						if (oldWindow != null)
+							oldWindow.close();
+						map.setCenter(center);
+						var text = get_flight_text(start_location, cityCode, departure_date, trip_duration, Number(price));
+						var infoWindow = new google.maps.InfoWindow({
+							position: center,
+							content: text,
+							map: map
 						});
+						oldWindow = infoWindow;
+					});
 
-						circles.push(cityCircle);
-					}
+					circles.push(cityCircle);
 				}
 				else{
 					$.ajax({
@@ -207,33 +199,32 @@ function refresh(){
 								center: {lat:  sec_response.city.location.latitude, lng: sec_response.city.location.longitude},
 								movement: total
 							}
-							if (quant == quant2){
-								var cityCircle = new google.maps.Circle({
-									strokeColor: color,
-									strokeOpacity: 1,
-									strokeWeight: 2,
-									fillColor: color,
-									fillOpacity: 0.6,
-									map: map,
-									center: city.center,
-									radius: 10000 + Math.sqrt(city.movement) * 100
+							var cityCircle = new google.maps.Circle({
+								strokeColor: color,
+								strokeOpacity: 1,
+								strokeWeight: 2,
+								fillColor: color,
+								fillOpacity: 0.6,
+								map: map,
+								center: city.center,
+								radius: 10000 + Math.sqrt(city.movement) * 100
+							});
+							
+							cityCircle.addListener('click', function() {
+								if (oldWindow != null)
+									oldWindow.close();
+								map.setCenter(center);
+								var text = get_flight_text(start_location, cityCode, departure_date, trip_duration, Number(price));
+								alert(text);
+								var infoWindow = new google.maps.InfoWindow({
+									position: center,
+									content: text,
+									map: map
 								});
-								
-								cityCircle.addListener('click', function() {
-									if (oldWindow != null)
-										oldWindow.close();
-									map.setCenter(center);
-									var text = get_flight_text(start_location, cityCode, departure_date, trip_duration, Number(price));
-									var infoWindow = new google.maps.InfoWindow({
-										position: center,
-										content: text,
-										map: map
-									});
-									oldWindow = infoWindow;
-								});
+								oldWindow = infoWindow;
+							});
 
-								circles.push(cityCircle);
-							}
+							circles.push(cityCircle);
 						}
 					});
 				}
