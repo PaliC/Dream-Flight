@@ -30,18 +30,33 @@
 					<!-- Logo -->
 					<img class="mx-4 my-5" id="logo" src="./static/img/logo-white.svg"/>
 					<!-- Start Location -->
-					<input class="form-control ml-3 my-5" type="text" placeholder="Start location">
+					<input class="form-control ml-3 mt-5 mb-2" type="text" placeholder="Start location">
 					<!-- Travel Dates -->
-					<p class="text-center">Travel Dates</p>
 					<div class="form-group row ml-3">
 					  	<label for="departure-date-input" class="col-form-label">Departure</label>
 					    <input class="form-control" type="date" name="trip"
 					    	   value="2018-09-16" min="2018-09-16" max="2020-12-31" id="departure-date-input">
+			    	    <input type="range" class="custom-range pt-3" id="departure-date-slider">
 					</div>
 					<div class="form-group row ml-3">
 					  	<label for="return-date-input" class="col-form-label">Return</label>
 					    <input class="form-control" type="date" name="trip"
 					    	   value="2018-09-16" min="2018-09-16" max="2020-12-31" id="return-date-input">
+			    	    <input type="range" class="custom-range pt-3" id="return-date-slider">
+					</div>
+					<!-- Budget -->
+					<div class="form-group row ml-3">
+						<div class="row ml-1">
+						  	<label for="budget-input" class="col-form-label">Budget</label>
+						</div>
+						<div class="row">
+						  	<div class="col-5">
+						    	<input class="form-control" type="number" name="trip" id="budget-input">
+						    </div>
+						    <div class="col-7">
+					    	    <input type="range" class="custom-range pt-3" id="budget-slider">
+					    	</div>
+						</div>
 					</div>
 					<!-- Go Button -->
 					<div class="text-center ml-3">
