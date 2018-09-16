@@ -12,6 +12,7 @@ function getCodes(){
 				var obj = data.codes[i];
 				var key = Object.keys(obj);
 				cityCodes[key] = obj[key];
+				alert();
 			}
 		}
     });
