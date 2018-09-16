@@ -91,13 +91,13 @@ function get_flight_text(start_location, cityCode, departure_date, duration, pri
 			+ "&departure_date=" + departure_date + "&return_date=" + return_day + "&number_of_results=1"
 	}).done(function(response) {
 		
-		outbound_duration = response.results[0].itineraries[0].outbound.duration;
-		inbound_duration = response.results[0].itineraries[0].inbound.duration;
-		fare = response.results[0].fare.total_price;
-		outbound_stops = response.results[0].itineraries[0].outbound.flights.length;
-		inbound_stops = response.results[0].itineraries[0].inbound.flights.length;
+		var outbound_duration = response.results[0].itineraries[0].outbound.duration;
+		var inbound_duration = response.results[0].itineraries[0].inbound.duration;
+		var fare = response.results[0].fare.total_price;
+		var outbound_stops = response.results[0].itineraries[0].outbound.flights.length;
+		var inbound_stops = response.results[0].itineraries[0].inbound.flights.length;
 		
-		seats_left = 99;
+		var seats_left = 99;
 		for (var i=0;i<=outbound_stops;i++){
 			seats_left = Math.min(seats_left, response.results[0].itineraries[0].outbound.flights[i].booking_info.seats_remaining);
 		}
@@ -112,7 +112,7 @@ function get_flight_text(start_location, cityCode, departure_date, duration, pri
 			inbound_stops = "Direct";
 		else inbound_stops = inbound_stops + " stops";
 
-		text = "Outbound: " + outbound_duration + ", " + outbound_stops + "\nReturn: " 
+		var text = "Outbound: " + outbound_duration + ", " + outbound_stops + "\nReturn: " 
 		+ inbound_duration + ", " + inbound_stops + "\nPrice: $" + fare + "\nSeats remaining " + seats_left + "\n";
 		
 		return text;
