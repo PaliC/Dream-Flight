@@ -67,8 +67,8 @@ $(document).ready(function() {
 		return Math.floor((utc2 - utc1) / _MS_PER_DAY);
 	}
 	
-	function give_me_some_inspiration(ori, departure_date, return_date, max_price){
-		var duration = dateDiffInDays(new Date(departure_date),new Date(return_date));
+	function give_me_some_inspiration(ori, departure_date, trip_duration, max_price){
+		var duration = trip_duration;
 		$.ajax({
 			type: 'GET',
 			url: "https://api.sandbox.amadeus.com/v1.2/flights/inspiration-search?apikey=" + APIkey + "&origin=" + ori + "&departure_date=" + departure_date + "&max_price" + max_price + "&duration" + duration.toString()
@@ -76,7 +76,7 @@ $(document).ready(function() {
 			destination = {
 				name: response.results.destination,
 				departure_date: response.results.departure_date,
-				return_date: response.results.return_date,
+				trip_duration: response.results.trip_duration,
 				price: response.results.price,
 				airline: response.results.airline,
 			}
@@ -109,7 +109,8 @@ $(document).ready(function() {
 		var budget = document.getElementById('budget-input').value;
 		budget = Number(budget);
 		var departure_date = document.getElementById('departure-date-input').value;
-		var return_date = document.getElementById('return-date-input').value;
+		// var return_date = document.getElementById('return-date-input').value;
+		var trip_duration = document.getElementById('trip-duration').value;
 		
 		$.ajax({
 			type: 'GET',
@@ -122,7 +123,7 @@ $(document).ready(function() {
 				type: 'GET',
 				url: "https://api.sandbox.amadeus.com/v1.2/flights/inspiration-search?origin=" 
 						+ start_location + "&apikey=" + APIkey + "&max_price=" + budget + "&departure_date=" + departure_date
-						+ "&return_date=" + return_date
+						+ "&duration=" + trip_duration
 			}).done(function(response) {
 				for (var i=0; i<response.results.length; i++){
 					// Add the circle for this city to the map.

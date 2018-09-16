@@ -40,16 +40,16 @@
 						<div class="form-group row ml-3">
 						  	<label for="departure-date-input" class="col-form-label">Departure</label>
 						    <input class="form-control" type="date" name="trip"
-						    	   value="2018-09-16" min="2018-09-16" max="2019-03-15" id="depDateControlledByRange">
+						    	   value="2018-09-16" min="2018-09-16" max="2019-03-15" id="departure-date-input">
 				    	    <!-- 86400000 = 1 day ; 1552608000000 = 2019-03-15 ; 1537056000000 = 2018-09-16 -->
 				    	    <input type="range" class="custom-range pt-3" step="86400000" max="1552608000000" min="1537056000000" value="1537056000000" id="rangeControlledByDepDate">
 		    	            <script>
 		    	            	jQuery(function($) {
-		    	            	    $('#depDateControlledByRange').on('input', function() {
+		    	            	    $('#departure-date-input').on('input', function() {
 		    	            	        $('#rangeControlledByDepDate').prop('valueAsNumber', $.prop(this, 'valueAsNumber'));
 		    	            	    });
 		    	            	    $('#rangeControlledByDepDate').on('input', function() {
-		    	            	        $('#depDateControlledByRange').prop('valueAsNumber', $.prop(this, 'valueAsNumber'));
+		    	            	        $('#departure-date-input').prop('valueAsNumber', $.prop(this, 'valueAsNumber'));
 		    	            	    });
 		    	            	});
 		    	            </script>
@@ -57,24 +57,24 @@
 						<!-- Trip Duration -->
 						<div class="form-group">
 							<div class="row ml-3">
-								<label for="return-date-input" class="col-form-label">Trip Duration (days)</label>
+								<label for="trip-duration" class="col-form-label">Trip Duration (days)</label>
 							</div>
 							<div class="row ml-1">
 								<div class="col-5">
 									<input class="form-control" type="number" name="trip"
-						    	    value="7" min="1" max="15" id="retDateControlledByRange">
+						    	    value="7" min="1" max="15" id="trip-duration">
 								</div>
 								<div class="col-7">
-									<input type="range" class="custom-range pt-3" step="1" max="15" min="1" value="7" id="rangeControlledByRetDate">
+									<input type="range" class="custom-range pt-3" step="1" max="15" min="1" value="7" id="rangeControlledByTripDuration">
 								</div>
 							</div>
 		    	            <script>
 		    	            	jQuery(function($) {
-		    	            	    $('#retDateControlledByRange').on('input', function() {
-		    	            	        $('#rangeControlledByRetDate').prop('valueAsNumber', $.prop(this, 'valueAsNumber'));
+		    	            	    $('#trip-duration').on('input', function() {
+		    	            	        $('#rangeControlledByTripDuration').prop('valueAsNumber', $.prop(this, 'valueAsNumber'));
 		    	            	    });
-		    	            	    $('#rangeControlledByRetDate').on('input', function() {
-		    	            	        $('#retDateControlledByRange').prop('valueAsNumber', $.prop(this, 'valueAsNumber'));
+		    	            	    $('#rangeControlledByTripDuration').on('input', function() {
+		    	            	        $('#trip-duration').prop('valueAsNumber', $.prop(this, 'valueAsNumber'));
 		    	            	    });
 		    	            	});
 		    	            </script>
@@ -86,7 +86,7 @@
 							</div>
 							<div class="row ml-1">
 								<div class="col-5">
-									<input class="form-control" type="number" name="trip" max="2000" min="0" value="500" id="inputControlledByRange">
+									<input class="form-control" type="number" name="trip" max="2000" min="0" value="500" id="budget-input">
 								</div>
 								<div class="col-7">
 									<input type="range" class="custom-range pt-1" step="1" max="2000" min="0" value="500" id="rangeControlledByInput">
@@ -94,11 +94,11 @@
 							</div>
 		    	            <script>
 		    	            	jQuery(function($) {
-		    	            	    $('#inputControlledByRange').on('input', function() {
+		    	            	    $('#budget-input').on('input', function() {
 		    	            	        $('#rangeControlledByInput').prop('valueAsNumber', $.prop(this, 'valueAsNumber'));
 		    	            	    });
 		    	            	    $('#rangeControlledByInput').on('input', function() {
-		    	            	        $('#inputControlledByRange').prop('valueAsNumber', $.prop(this, 'valueAsNumber'));
+		    	            	        $('#budget-input').prop('valueAsNumber', $.prop(this, 'valueAsNumber'));
 		    	            	    });
 		    	            	});
 		    	            </script>
