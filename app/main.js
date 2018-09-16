@@ -2,6 +2,22 @@ var map = null;
 
 var circles = [];
 
+function getCodes(){
+	$.ajax({
+		url:'./city_data.txt',
+		async: false,
+		success: function (data){
+			var json = JSON.parse(data);
+			for (var i=0; i < json.codes.length; i++){
+				var obj = json.codes[i];
+				var key = Object.keys(obj);
+				cityCodes[key] = obj[key];
+			}
+		}
+    });
+}
+
+
 function initMap() {
 	// Create the map.
 	  map = new google.maps.Map(document.getElementById('map'), {
@@ -114,6 +130,22 @@ $(document).ready(function() {
 					let budget_in_currency = 
 					let color = getColor(Number(price), budget);
 					alert(price);
+					var cityCode = response.results[i].destination;
+				if(cityCode in cityCodes){
+					var city = cityCodes[cityCode];
+					var cityCircle = new google.maps.Circle({
+						strokeColor: color,
+						strokeOpacity: 1,
+						strokeWeight: 2,
+						fillColor: color,
+						fillOpacity: 0.6,
+						map: map,
+						center: city.center,
+						radius: Math.sqrt(city.movement) * 100
+					});
+					circles.push(cityCircle);
+				}
+				else{
 					$.ajax({
 						type: 'GET',
 						url: "https://api.sandbox.amadeus.com/v1.2/location/" + response.results[i].destination + "?apikey=" + APIkey
@@ -138,10 +170,11 @@ $(document).ready(function() {
 							fillOpacity: 0.6,
 							map: map,
 							center: city.center,
-							radius: Math.sqrt(city.movement) * 60
+							radius: Math.sqrt(city.movement) * 100
 						});
 						circles.push(cityCircle);
 					});
+				}
 				}
 			});
 		});
