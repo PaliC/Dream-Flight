@@ -9,13 +9,13 @@ function getCodes(){
 		url:'./city_data.txt',
 		async: false,
 		success: function (data){
-			alert();
 			var json = data.parse();
 			for (var i=0; i < json.codes.length; i++){
-				var obj = data.codes[i];
+				var obj = json.codes[i];
 				var key = Object.keys(obj);
 				cityCodes[key] = obj[key];
-				alert();
+				alert(key);
+				alert(cityCodes[key].name);
 			}
 		}
     });
