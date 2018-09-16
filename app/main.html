@@ -23,8 +23,7 @@
 
 	<body>
 		<div class="container-fluid h-100 p-0" id="wrapper">
-			<div class="row h-100">
-
+			<div class="row h-100 m-0">
 				<!-- Left Side Bar -->
 				<div class="col-3" id="side-bar">
 					<!-- Logo -->
@@ -46,31 +45,24 @@
 					</div>
 					<!-- Budget -->
 					<div class="form-group row ml-3">
-						<div class="row ml-1">
-						  	<label for="budget-input" class="col-form-label">Budget</label>
+						<label for="budget-input" class="col-form-label">Budget</label>
+					</div>
+					<div class="row ml-1">
+						<div class="col-5">
+							<input class="form-control" type="number" name="trip" id="budget-input">
 						</div>
-						<div class="row">
-						  	<div class="col-5">
-						    	<input class="form-control" type="number" name="trip" id="budget-input">
-						    </div>
-						    <div class="col-7">
-					    	    <input type="range" class="custom-range pt-3" id="budget-slider">
-					    	</div>
+						<div class="col-7">
+							<input type="range" class="custom-range pt-1" id="budget-slider">
 						</div>
 					</div>
 					<!-- Go Button -->
 					<div class="text-center ml-3">
 						<button type="button" class="btn btn-light btn-lg my-5" id="go-button">Start exploring!</button>
 					</div>
-					<!-- Credits -->
-					<div class="text-center">
-					  <p class="ml-3 white-text" id="credits">Frankie Lam, Lillian Meng, Sahan Paliskara, Lucas Salvador</p>
-					  <p class="white-text" id="credits">HackMIT 2018</p>
-					</div>
 				</div>
 
 				<!-- Map -->
-				<div class="col-9" style="background-color: #7B7B7B;">
+				<div class="col-9 pr-0" style="background-color: #7B7B7B;">
 					<div id="search-input">
 						<div id="map"></div>
 						
