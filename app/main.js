@@ -1,33 +1,14 @@
 var map = null;
 
-var cityCodes = {};
-
 var circles = [];
-
-function getCodes(){
-	$.ajax({
-		url:'./city_data.txt',
-		async: false,
-		success: function (data){
-			var json = data.parse();
-			alert(json);
-			for (var i=0; i < json.codes.length; i++){
-				var obj = json.codes[i];
-				var key = Object.keys(obj);
-				cityCodes[key] = obj[key];
-			}
-		}
-    });
-}
 
 function initMap() {
 	// Create the map.
-	map = new google.maps.Map(document.getElementById('map'), {
-	zoom: 3,
-	center: {lat: 0, lng: 0},
-	mapTypeId: 'roadmap'
+	  map = new google.maps.Map(document.getElementById('map'), {
+	  zoom: 3,
+	  center: {lat: 0, lng: 0},
+	  mapTypeId: 'roadmap'
 	});
-	getCodes();
 }
 
 function getColor(price, max_price){
@@ -40,14 +21,15 @@ function getColor(price, max_price){
 	var percentage = value / max_value;
 
 	var r = Math.round(percentage * 255.0);
-	var g = Math.round(255.0 - percentage * 255.0);
+	var g = 255-r;
  
-	var hexR = r.toString(16);
+	var hexR = Number(r).toString(16);
+	
 	if (r < 16) {
        hexR = "0" + hexR;
 	}
 	
-	var hexG = g.toString(16);
+	var hexG = Number(g).toString(16);
 	if (g < 16) {
        hexG = "0" + hexG;
 	}
@@ -107,34 +89,31 @@ $(document).ready(function() {
 			circles[i].setMap(null);
 		circles = [];
 		
-		var origin = "NYC";
-		var max_price = 500;
-	
+		var start_location = document.getElementById('Start-location').value;
+		var budget = document.getElementById('budget-input').value;
+		budget = Number(budget);
+		var departure_date = document.getElementById('departure-date-input').value;
+		var return_date = document.getElementById('return-date-input').value;
+		
 		$.ajax({
 			type: 'GET',
-			url: "https://api.sandbox.amadeus.com/v1.2/flights/inspiration-search?origin=" + origin + "&apikey=" + APIkey + "&max_price=" + max_price
-		}).done(function(response) {
-			for (var i=0; i<response.results.length; i++){
-				// Add the circle for this city to the map.
-				let price = response.results[i].price;
-				let color = getColor(price, max_price);
-				
-				var cityCode = response.results[i].destination;
-				if(cityCode in cityCodes){
-					var city = cityCodes[cityCode];
-					var cityCircle = new google.maps.Circle({
-						strokeColor: color,
-						strokeOpacity: 1,
-						strokeWeight: 2,
-						fillColor: color,
-						fillOpacity: 0.6,
-						map: map,
-						center: city.center,
-						radius: Math.sqrt(city.movement) * 100
-					});
-					circles.push(cityCircle);
-				}
-				else{
+			url: "https://api.sandbox.amadeus.com/v1.2/airports/autocomplete?apikey=" + APIkey + "&term=" + start_location
+		}).done(function(res){
+			start_location = res[0].value;
+			document.getElementById('Start-location').value = start_location;
+
+			$.ajax({
+				type: 'GET',
+				url: "https://api.sandbox.amadeus.com/v1.2/flights/inspiration-search?origin=" 
+						+ start_location + "&apikey=" + APIkey + "&max_price=" + budget + "&departure_date=" + departure_date
+						+ "&return_date=" + return_date
+			}).done(function(response) {
+				for (var i=0; i<response.results.length; i++){
+					// Add the circle for this city to the map.
+					let price = response.results[i].price;
+					let budget_in_currency = 
+					let color = getColor(Number(price), budget);
+					alert(price);
 					$.ajax({
 						type: 'GET',
 						url: "https://api.sandbox.amadeus.com/v1.2/location/" + response.results[i].destination + "?apikey=" + APIkey
@@ -159,12 +138,13 @@ $(document).ready(function() {
 							fillOpacity: 0.6,
 							map: map,
 							center: city.center,
-							radius: Math.sqrt(city.movement) * 100
+							radius: Math.sqrt(city.movement) * 60
 						});
 						circles.push(cityCircle);
 					});
 				}
-			}
+			});
 		});
 	});
-});
+})
+
