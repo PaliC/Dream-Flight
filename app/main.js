@@ -127,7 +127,6 @@ $(document).ready(function() {
 				for (var i=0; i<response.results.length; i++){
 					// Add the circle for this city to the map.
 					let price = response.results[i].price;
-					let budget_in_currency = 
 					let color = getColor(Number(price), budget);
 					alert(price);
 					var cityCode = response.results[i].destination;
