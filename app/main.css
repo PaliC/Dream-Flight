@@ -28,6 +28,11 @@ img {
 	color: white;
 }
 
+#gradient-key {
+	height: 40px;
+	background-image: linear-gradient(to right, green, yellow, red, black);
+}
+
 /*#credits {
 	font-size: 10px;
 }*/
