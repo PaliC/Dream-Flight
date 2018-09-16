@@ -74,6 +74,54 @@ function getColor(price, max_price){
 	return '#'+hexR+hexG+'00';
 }
 
+function get_flight_text(start_location, cityCode, departure_date, duration, price){
+	var return_date = new Date(departure_date);
+	return_date.setDate(return_date.getDate() + Number(duration));
+	
+	var month = return_date.getMonth() + 1;
+	if (month < 10) month = "0" + month;
+	
+	var date = return_date.getDate() + 1;
+	if (date < 10) date = "0" + date;
+	
+	var return_day = return_date.getFullYear()+ "-" + month + "-" + date;
+	$.ajax({
+		type: 'GET',
+		url: "https://api.sandbox.amadeus.com/v1.2/flights/low-fare-search?apikey=" + APIkey 
+			+ "&origin=" + start_location + "&destination=" + cityCode
+			+ "&departure_date=" + departure_date + "&return_date=" + return_day
+	}).done(function(response) {
+		
+		outbound_duration = response.results[0].itineraries[0].outbound.duration;
+		inbound_duration = response.results[0].itineraries[0].inbound.duration;
+		fare = response.results[0].fare.total_price;
+		outbound_stops = response.results[0].itineraries[0].outbound.flights.length-1;
+		inbound_stops = response.results[0].itineraries[0].inbound.flights.length-1;
+		
+		seats_left = 99;
+		for (var i=0;i<=outbound_stops;i++){
+			seats_left = Math.min(seats_left, response.results[0].itineraries[0].outbound.flights[i].booking_info.seats_remaining);
+		}
+		for (var i=0;i<=inbound_stops;i++){
+			seats_left = Math.min(seats_left, response.results[0].itineraries[0].inbound.flights[i].booking_info.seats_remaining);
+		}
+
+		if (outbound_stops == 0)
+			outbound_stops = "Direct";
+		else outbound_stops = toString(outbound_stops) + " stops";
+		if (inbound_stops == 0)
+			inbound_stops = "Direct";
+		else inbound_stops = toString(inbound_stops) + " stops";
+
+		text = "Outbound: " + outbound_duration + ", " + outbound_stops + "\nReturn: " 
+		+ inbound_duration + ", " + inbound_stops + "\nPrice: $" + "fare\nSeats remaining " + seats_left + "\n";
+		
+		alert(text);
+		
+		return text;
+	});
+}
+
 function refresh(){
 	quant++;
 	
@@ -129,9 +177,10 @@ function refresh(){
 							if (oldWindow != null)
 								oldWindow.close();
 							map.setCenter(center);
+							var text = get_flight_text(start_location, cityCode, departure_date, trip_duration, Number(price));
 							var infoWindow = new google.maps.InfoWindow({
 								position: center,
-								content: "hello",
+								content: text,
 								map: map
 							});
 							oldWindow = infoWindow;
@@ -174,9 +223,10 @@ function refresh(){
 									if (oldWindow != null)
 										oldWindow.close();
 									map.setCenter(center);
+									var text = get_flight_text(start_location, cityCode, departure_date, trip_duration, Number(price));
 									var infoWindow = new google.maps.InfoWindow({
 										position: center,
-										content: "hello",
+										content: text,
 										map: map
 									});
 									oldWindow = infoWindow;
