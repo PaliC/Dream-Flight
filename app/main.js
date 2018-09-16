@@ -19,6 +19,17 @@ function getCodes(){
     });
 }
 
+var exchange_rates = {};
+function getExchangeRates(){
+	$.ajax({
+		url: './exchange.txt',
+		async: false,
+		success: function(data){
+			var json = JSON.parse(data);
+			exchange_rates = json.rates;
+		}
+	});
+}
 
 function initMap() {
 	// Create the map.
@@ -27,6 +38,8 @@ function initMap() {
 	  center: {lat: 0, lng: 0},
 	  mapTypeId: 'roadmap'
 	});
+	  getCodes();
+	  getExchangeRates();
 }
 
 function getColor(price, max_price){
@@ -125,10 +138,13 @@ $(document).ready(function() {
 						+ start_location + "&apikey=" + APIkey + "&max_price=" + budget + "&departure_date=" + departure_date
 						+ "&duration=" + trip_duration
 			}).done(function(response) {
+				let currency = response.currency;
+				alert(exchange_rates[currency])
 				for (var i=0; i<response.results.length; i++){
 					// Add the circle for this city to the map.
 					let price = response.results[i].price;
-					let color = getColor(Number(price), budget);
+
+					let color = getColor(Number(price)*exchange_rates[currency], budget);
 
 					var cityCode = response.results[i].destination;
 				if(cityCode in cityCodes){
@@ -151,28 +167,31 @@ $(document).ready(function() {
 						url: "https://api.sandbox.amadeus.com/v1.2/location/" + response.results[i].destination + "?apikey=" + APIkey
 					}).done(function(sec_response) {
 						var total =  0;
-						for (var i=0; i<sec_response.airports.length; i++){
-							total = total + sec_response.airports[i].aircraft_movements;
-						}				
-						var city = {
-							name: sec_response.city.name,
-							state: sec_response.city.state,
-							country: sec_response.city.country,
-							center: {lat:  sec_response.city.location.latitude, lng: sec_response.city.location.longitude},
-							movement: total
+						if (sec_response.airports !== undefined || typeof sec_response.airports !== "undefined"){
+
+							for (var i=0; i<sec_response.airports.length; i++){
+								total = total + sec_response.airports[i].aircraft_movements;
+							}				
+							var city = {
+								name: sec_response.city.name,
+								state: sec_response.city.state,
+								country: sec_response.city.country,
+								center: {lat:  sec_response.city.location.latitude, lng: sec_response.city.location.longitude},
+								movement: total
+							}
+						
+							var cityCircle = new google.maps.Circle({
+								strokeColor: color,
+								strokeOpacity: 1,
+								strokeWeight: 2,
+								fillColor: color,
+								fillOpacity: 0.6,
+								map: map,
+								center: city.center,
+								radius: Math.sqrt(city.movement) * 100
+							});
+							circles.push(cityCircle);
 						}
-					
-						var cityCircle = new google.maps.Circle({
-							strokeColor: color,
-							strokeOpacity: 1,
-							strokeWeight: 2,
-							fillColor: color,
-							fillOpacity: 0.6,
-							map: map,
-							center: city.center,
-							radius: Math.sqrt(city.movement) * 100
-						});
-						circles.push(cityCircle);
 					});
 				}
 				}
