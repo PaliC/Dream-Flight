@@ -1,5 +1,7 @@
 var map = null;
 
+var cityCodes = {};
+
 var circles = [];
 
 function getCodes(){
@@ -108,7 +110,7 @@ $(document).ready(function() {
 		budget = Number(budget);
 		var departure_date = document.getElementById('departure-date-input').value;
 		var return_date = document.getElementById('return-date-input').value;
-	
+		
 			$.ajax({
 				type: 'GET',
 				url: "https://api.sandbox.amadeus.com/v1.2/flights/inspiration-search?origin=" 
@@ -119,7 +121,7 @@ $(document).ready(function() {
 					// Add the circle for this city to the map.
 					let price = response.results[i].price;
 					let color = getColor(Number(price), budget);
-					alert(price);
+
 					var cityCode = response.results[i].destination;
 				if(cityCode in cityCodes){
 					var city = cityCodes[cityCode];
