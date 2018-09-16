@@ -13,8 +13,9 @@ amadeus = Client(
 
 APIkey = "deruRte5Y9yrs4eK59paEuSZ9mGbGX0G"
 def convert_duration(duration):
-    t = datetime.strptime(duration,"%H:%M")
-    delta = timedelta(hours=t.hour, minutes=t.minute)
+    t = duration.split(":")
+    delta = timedelta(hours=int(t[0]), minutes=int(t[1]))
+    # pp.pprint(delta)
     return delta
 def min_dur_search(ori, des, dep, ret, max_price):
     try:
@@ -28,13 +29,27 @@ def min_dur_search(ori, des, dep, ret, max_price):
         low_fare_results = loads(low_fare_results.content)
         champion_duration = timedelta(hours=999,minutes=0)
         champion_it = low_fare_results["results"][0]["itineraries"][0]
+        champion_fare = low_fare_results["results"][0]["fare"]
         for x in low_fare_results["results"]:
             
             for it in x["itineraries"]:
                 duration = convert_duration(it["inbound"]["duration"]) + convert_duration(it["outbound"]["duration"])
-                if champion_duration > duration:
+                if champion_duration > duration and float(x["fare"]["total_price"]) < float(max_price):
+                    pp.pprint(float(x["fare"]["total_price"]))
                     champion_duration = duration
                     champion_it = it
-        return champion_it
+                    champion_fare = x["fare"]
+        return champion_it, champion_fare
     except ResponseError as error:
         print(error)
+
+
+it, fare = min_dur_search("BOS","LON","2018-12-25","2018-12-30", 300)
+# pp.pprint(it)
+# pp.pprint(fare)
+it, fare = min_dur_search("BOS","LON","2018-12-25","2018-12-30", 500)
+# pp.pprint(it)
+# pp.pprint(fare)
+it, fare = min_dur_search("BOS","LON","2018-12-25","2018-12-30", 800)
+# pp.pprint(it)
+# pp.pprint(fare)
