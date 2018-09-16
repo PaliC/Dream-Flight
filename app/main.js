@@ -39,6 +39,50 @@ function getColor(price, max_price){
 $(document).ready(function() {
 	var APIkey = "knok2EsBatxfKdIeAXbAjhqQDGEFMAul";
 	
+	const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+
+	function dateDiffInDays(a, b) {
+		const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+		const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+	  
+		return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+	}
+	
+	function give_me_some_inspiration(ori, departure_date, return_date, max_price){
+		var APIkey = "deruRte5Y9yrs4eK59paEuSZ9mGbGX0G";
+		var duration = dateDiffInDays(new Date(departure_date),new Date(return_date));
+		$.ajax({
+			type: 'GET',
+			url: "https://api.sandbox.amadeus.com/v1.2/flights/inspiration-search?apikey=" + APIkey + "&origin=" + ori + "&departure_date=" + departure_date + "&max_price" + max_price + "&duration" + duration.toString()
+		}).done(function(response) {	
+			destination = {
+				name: response.results.destination,
+				departure_date: response.results.departure_date,
+				return_date: response.results.return_date,
+				price: response.results.price,
+				airline: response.results.airline,
+			}
+		});
+	}
+
+	function find_poi(lat, long, rad){
+		var APIkey = "deruRte5Y9yrs4eK59paEuSZ9mGbGX0G";
+		$.ajax({
+			type: 'GET',
+			url: "https://api.sandbox.amadeus.com/v1.2/points-of-interest/yapq-search-circle?apikey=" + APIkey + "&latitude=" + lat + "&longitude=" + long + "&radius=" + rad
+		}).done(function(response) {	
+			points_of_interest = {
+				name: response.points_of_interest.title,
+				categories: response.points_of_interest.categories,
+				grades: response.points_of_interest.grades,
+				main_image: response.points_of_interest.main_image,
+				details: response.points_of_interest.details,
+				location: response.points_of_interest.location,
+				walk_time: response.points_of_interest.walk_time
+			}
+		});
+	}
+	
 	$('#go-button').click(function() {
 		for (var i = 0; i < circles.length; i++)
 			circles[i].setMap(null);
