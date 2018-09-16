@@ -9,8 +9,7 @@ function getCodes(){
 		url:'./city_data.txt',
 		async: false,
 		success: function (data){
-			var json = data.parse();
-			alert(json);
+			var json = JSON.parse(data);
 			for (var i=0; i < json.codes.length; i++){
 				var obj = json.codes[i];
 				var key = Object.keys(obj);
