@@ -144,7 +144,7 @@ $(document).ready(function() {
 					// Add the circle for this city to the map.
 					let price = response.results[i].price;
 
-					let color = getColor(Number(price)*exchange_rates[currency], budget);
+					let color = getColor(Number(price), budget*exchange_rates[currency]);
 
 					var cityCode = response.results[i].destination;
 				if(cityCode in cityCodes){
