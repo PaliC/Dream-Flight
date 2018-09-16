@@ -7,8 +7,11 @@ var circles = [];
 function getCodes(){
 	$.ajax({
 		url:'./city_data.txt',
+		async: false,
 		success: function (data){
-			for (var i=0; i < data.codes.length; i++){
+			alert();
+			var json = data.parse();
+			for (var i=0; i < json.codes.length; i++){
 				var obj = data.codes[i];
 				var key = Object.keys(obj);
 				cityCodes[key] = obj[key];
