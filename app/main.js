@@ -1,14 +1,30 @@
 var map = null;
 
+var cityCodes = {};
+
 var circles = [];
+
+function getCodes(){
+	$.ajax({
+    url:'city-data.txt',
+    success: function (data){
+		for (var i=0; i < data.codes.length; i++){
+			var obj = data.codes[i];
+			var key = Object.keys(obj);
+			cityCodes[key] = obj[key];
+		}
+    }
+  });
+}
 
 function initMap() {
 	// Create the map.
-	  map = new google.maps.Map(document.getElementById('map'), {
-	  zoom: 3,
-	  center: {lat: 0, lng: 0},
-	  mapTypeId: 'roadmap'
+	map = new google.maps.Map(document.getElementById('map'), {
+	zoom: 3,
+	center: {lat: 0, lng: 0},
+	mapTypeId: 'roadmap'
 	});
+	getCodes();
 }
 
 function getColor(price, max_price){
