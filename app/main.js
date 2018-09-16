@@ -111,6 +111,13 @@ $(document).ready(function() {
 		var departure_date = document.getElementById('departure-date-input').value;
 		var return_date = document.getElementById('return-date-input').value;
 		
+		$.ajax({
+			type: 'GET',
+			url: "https://api.sandbox.amadeus.com/v1.2/airports/autocomplete?apikey=" + APIkey + "&term=" + start_location
+		}).done(function(res){
+			start_location = res[0].value;
+			document.getElementById('Start-location').value = start_location;
+
 			$.ajax({
 				type: 'GET',
 				url: "https://api.sandbox.amadeus.com/v1.2/flights/inspiration-search?origin=" 
@@ -169,6 +176,7 @@ $(document).ready(function() {
 				}
 				}
 			});
+		});
 	});
 })
 
