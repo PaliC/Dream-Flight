@@ -119,7 +119,7 @@ function refresh(){
 							fillOpacity: 0.6,
 							map: map,
 							center: city.center,
-							radius: 10000+ Math.sqrt(city.movement) * 100
+							radius: 10000+Math.sqrt(city.movement) * 100
 						});
 						circles.push(cityCircle);
 					}
