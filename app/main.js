@@ -54,7 +54,7 @@ function getColor(price, max_price){
 }
 
 $(document).ready(function() {
-	var APIkey = "jqZzQqxQnQvwGT9OGZp5Vk3fD6M7nVMR";
+	var APIkey = "deruRte5Y9yrs4eK59paEuSZ9mGbGX0G";
 	
 	const _MS_PER_DAY = 1000 * 60 * 60 * 24;
 
